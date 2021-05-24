@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<string.h>
+
+int max(int a, int b){
+    return a>b?a:b;
+}
+
+int longestcommomsubsequence(char *a, int len1, char *b, int len2){
+    int lcs[len1+1][len2+1];
+    int i,j;
+    for(i=0;i<=len1;i++){
+        for(j=0;j<=len2;j++){
+            if(i==0 || j==0) lcs[i][j]=0;
+            else if(a[i-1]==b[j-1]) lcs[i][j]=1+lcs[i-1][j-1];
+            else lcs[i][j]=max(lcs[i-1][j],lcs[i][j-1]);
+        }
+    }
+    return lcs[len1][len2];
+}
+
+int main(){
+    char a[]="abcd";
+    char b[]="sbcfdg";
+    int ans = longestcommomsubsequence(a, strlen(a), b, strlen(b));
+    printf("%d", ans);
+    return 0;
+}
