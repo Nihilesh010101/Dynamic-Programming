@@ -1,0 +1,22 @@
+#include<stdio.h>
+
+int no_of_possible_paths_in_matrix(int row_size, int col_size, int *desired_location){
+    int matrix[row_size][col_size];
+    for(int i=0;i<row_size;i++){
+        for(int j=0;j<col_size;j++){
+            if(i==0 || j==0) matrix[i][j]=1;
+            else matrix[i][j]=matrix[i-1][j]+matrix[i][j-1];
+        }
+    }
+    return matrix[desired_location[0]][desired_location[1]];
+}
+
+int main(){
+    int row_size, col_size;
+    scanf("%d", &row_size);
+    scanf("%d", &col_size);
+    int desired_location[2]={3,3};
+    int possible_paths = no_of_possible_paths_in_matrix(row_size, col_size, &desired_location);
+    printf("%d", possible_paths);
+    return 0;
+}
