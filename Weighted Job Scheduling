@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Jobs{
+    int start;
+    int end;
+    int profit;
+}JS;
+
+void swap(JS *t1, JS *t2){
+    JS temp = *t1;
+    *t1=*t2;
+    *t2=temp;
+}
+
+void sort(JS *jobs, int n){
+    for(int i=0;i<n-1;i++){
+        for(int j=i+1;j<n;j++){
+            if(jobs[j].end < jobs[i].end){
+                swap(&jobs[j], &jobs[i]);
+            }
+        }
+    }
+}
+
+int max(int a, int b){
+    return a>b?a:b;
+}
+
+int main(){
+    int n=5;
+    JS jobs[5]={{2, 6, 5}, {5, 9, 4}, {7, 10, 8}, {4, 7, 2}, {6, 8, 6}};
+    sort(jobs, n);
+    int temp[n];
+    for(int i=0;i<n;i++) temp[i]=jobs[i].profit;
+    for(int i=1;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(jobs[j].end <= jobs[i].start){
+                temp[i] = max(temp[i], temp[j]+jobs[i].profit);
+            }
+        }
+    }
+    int max_profit=temp[0];
+    int index;
+    for(int i=1;i<n;i++) if(max_profit<temp[i]){ max_profit=temp[i]; index=i;}
+    printf("Max Profit: %d\n", max_profit);
+    //Not working
+    /*int iter=0;
+    for(int i=0;i<n;i++){
+        if(index!=i){
+            if(jobs[index].start <= jobs[i].end){
+                temp[iter]=i;
+                iter++;
+            }
+        }
+    }
+    for(int i=0;i<iter-1;i++){
+        if(jobs[temp[i+1]].start <= jobs[temp[i]].end){
+            int a = jobs[temp[i+1]].profit < jobs[temp[i]].profit ? i+1 : i;
+            temp[a]=-1;
+        }
+    }
+    printf("Jobs that can be scheduled are:\n");
+    for(int i=0;i<iter;i++){
+        if(temp[i]!=-1){
+            printf("%d - %d\n", jobs[temp[i]].start, jobs[temp[i]].end);
+        }
+    }
+    printf("%d - %d\n", jobs[index].start, jobs[index].end);
+    */
+    return 0;
+}
