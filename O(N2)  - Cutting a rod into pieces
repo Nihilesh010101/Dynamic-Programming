@@ -1,0 +1,40 @@
+#include<stdio.h>
+
+int max(int a, int b){
+    return a>b?a:b;
+}
+
+int main(){
+    int rod_length=8;
+    //Profits for pieces of length 1,2,3,4,....rod_length/ rod_length-1 is given below
+    int profits[]={1,5,8,9,10,17,17,20};
+    int n=sizeof(profits)/sizeof(profits[0]);
+    int temp[n+1][rod_length+1];
+    for(int i=0;i<n+1;i++){
+        for(int j=0;j<rod_length+1;j++){
+            if(i==0 || j==0) temp[i][j]=0;
+            else if(j < i) temp[i][j]=temp[i-1][j];
+            else{
+                int max_profit_inc=0;
+                if(j%i==0){
+                    max_profit_inc=(j/i)*profits[i-1];
+                    //printf("\n\n%d", max_profit_inc);
+                }
+                else if(j%i!=0){
+                    max_profit_inc=(j/i)*profits[i-1];
+                    int rem=j%i;
+                    max_profit_inc+=temp[i][rem];
+                }
+                temp[i][j]=max(temp[i-1][j], max_profit_inc);
+            }
+        }
+    }
+    for(int i=0;i<n+1;i++){
+        for(int j=0;j<rod_length+1;j++){
+            printf("%d ", temp[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n\n%d", temp[n][rod_length]);
+    return 0;
+}
