@@ -1,0 +1,65 @@
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+    int n,m;
+    n=5;
+    m=4;
+    int arr[n][m]={{1, 2, 3, 4} ,{5, 6, 7, 8},{9, 10, 11, 12}, {13, 14, 15, 16}, {17, 18, 19, 20}};
+    vector<vector<int>> temp(n,vector<int>(m,-1));
+    temp[0][0]=arr[0][0];
+    for(int i=1;i<n;i++){
+        for(int j=0;j<m;j++){
+            vector<int> set;
+            if(j-1 >= 0 && temp[i-1][j-1]!=-1) set.push_back(temp[i-1][j-1]);
+            if(j+1 < m && temp[i-1][j+1]!=-1) set.push_back(temp[i-1][j+1]);
+            if(temp[i-1][j]!=-1) set.push_back(temp[i-1][j]);
+            int max=INT_MIN;
+            if(set.empty()) continue;
+            for(auto it:set){
+                if(it>max) max=it;
+            }
+            temp[i][j]=arr[i][j]+max;
+        }
+    }
+    int sum=temp[n-1][0];
+    cout<<sum<<" ";
+    int target=temp[n-1][0]-arr[n-1][0];
+    for(int i=n-2;i>0;i--){
+        for(int j=0;j<m;j++){
+            if(temp[i][j]==target){
+                target-=arr[i][j];
+                arr[i][j]=-1;
+                break;
+            }
+        }
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            temp[i][j]=-1;
+        }
+    }
+    temp[0][m-1]=arr[0][m-1];
+    for(int i=1;i<n;i++){
+        for(int j=m-1;j>=0;j--){
+            if(arr[i][j]==-1) continue;
+            vector<int> set;
+            if(j-1 >= 0 && temp[i-1][j-1]!=-1) set.push_back(temp[i-1][j-1]);
+            if(j+1 < m && temp[i-1][j+1]!=-1) set.push_back(temp[i-1][j+1]);
+            if(temp[i-1][j]!=-1) set.push_back(temp[i-1][j]);
+            int max=INT_MIN;
+            if(set.empty()) continue;
+            for(auto it:set){
+                if(it>max) max=it;
+            }
+            temp[i][j]=arr[i][j]+max;
+        }
+    }
+    cout<<temp[n-1][m-1]<<" ";
+    sum+=temp[n-1][m-1];
+    cout<<sum;
+    return 0;
+}
